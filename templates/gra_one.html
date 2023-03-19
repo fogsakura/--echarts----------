@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>品牌车系数量分布</title>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="{{url_for('static',filename='jquery-3.3.1.min.js',_external=True)}}"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/uni.css')}}">
+    <!-- <script src="../node_modules/echarts/dist/echarts.js"></script> -->
+</head>
+
+<body>
+    <div id="main" class="main"></div>
+    <button class="next"><a href="http://127.0.0.1:5000/car_price" ,target="_blank" ,ref="noreferrer">NEXT</a></button>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'), 'dark');
+
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: "不同品牌车系数量分布图",
+                textStyle: {
+                    fontSize: '30',
+                    fontStyle: "italic",
+                    align: "center"
+                },
+            },
+            grid: {
+                left: '1%',
+                // right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    // type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: { readOnly: false },
+                magicType: { type: ['line', 'bar'] },
+                restore: {},
+                saveAsImage: {}
+                }
+            },
+            xAxis: {
+                name: "品牌",
+                type: 'category',
+                data: [],
+                axisLabel: {
+                    interval: 0,
+                    rotate: 30
+                },
+            },
+            yAxis: {
+                name: "车系数量",
+                type: 'value'
+            },
+            dataZoom: [
+                {
+                    show: true,
+                    start: 94,
+                    end: 100
+                },
+                {
+                    type: 'inside',
+                    start: 94,
+                    end: 100
+                },
+                {
+                    show: true,
+                    yAxisIndex: 0,
+                    filterMode: 'empty',
+                    width: 30,
+                    height: '80%',
+                    showDataShadow: false,
+                    left: '93%'
+                }
+            ],
+            series: [
+                {
+                    data: [],
+                    type: 'bar',
+                    itemStyle: {
+                        color: "rgb(79,222,165)"
+                    },
+                    showBackground: true,
+                    backgroundStyle: {
+                        color: 'rgba(180, 180, 180, 0.2)'
+                    }
+                }
+            ]
+        };
+
+        // 通过json文件更新图表
+        src = "{{url_for('static',filename='gra_one_data.json',_external=True)}}"
+        $.get(src).done(function (data) {
+            myChart.setOption({
+                xAxis: {
+                    data: data.car_name
+                },
+                series: [
+                    {
+                        data: data.car_num
+                    }
+                ]
+            });
+        });
+
+
+        option && myChart.setOption(option);
+    </script>
+</body>
+
+</html>

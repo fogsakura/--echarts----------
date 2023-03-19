@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车系评分折线图</title>
+    <!-- <script src="../node_modules/echarts/dist/echarts.js"></script> -->
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="{{url_for('static',filename='jquery-3.3.1.min.js',_external=True)}}"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/uni.css')}}">
+</head>
+<body>
+    <div id="main" class="main"></div>
+    <button class="next"><a href = "http://127.0.0.1:5000/last",target="_blank",ref="noreferrer">NEXT</a></button>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+  
+        option = {
+            backgroundColor:'#000',
+            title: {
+                top: '0',
+                left: 'center',
+                text: '车系评分',
+                textStyle: {
+                    align: 'center',
+                    color: '#FFFFFF',
+                    fontSize: 22,
+                }
+
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: { readOnly: false },
+                magicType: { type: ['line', 'bar'] },
+                restore: {},
+                saveAsImage: {}
+                }
+            },
+            // backgroundColor: '#043491',
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                }
+            },
+            // legend: {
+            //     x: 'center',
+            //     y: '40px',
+            //     textStyle: {
+            //         color: '#f2f2f2',
+            //         fontSize: 13,
+            //     },
+            //     icon: 'circle',
+            //     data: ['评分']
+            // },
+            dataZoom: [{
+                    type: 'slider',
+                    show: true,
+                    height: 20,
+                    left: '10%',
+                    right: '10%',
+                    bottom: '2%',
+                    start: 50,
+                    end: 58,
+                    textStyle: {
+                        color: '#d4ffff',
+                        fontSize: 11,
+                    },
+                }, {
+                    type: 'inside'
+                }
+
+            ],
+            grid: {
+                right: '5%',
+                bottom: '10%',
+                left: '2%',
+                top: '80px',
+                containLabel: true
+            },
+            xAxis: [{
+                type: 'category',
+                data: [],
+                name: '车系',
+                nameTextStyle: {
+                    color: '#d4ffff'
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#0B4CA9'
+                    }
+                },
+                axisTick: {
+                    show: false,
+                },
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: "#FFF",
+                        fontSize: 12,
+                    },
+                    interval:0,
+                    rotate:30
+                },
+            }],
+            yAxis: [{
+                type: 'value',
+                name: '评分',
+                nameTextStyle: {
+                    color: '#d4ffff'
+                },
+                min:2,
+                max:5,
+                position: 'left',
+                axisLine: {
+                    lineStyle: {
+                        color: '#0B4CA9'
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: "#0B4CA9",
+                    }
+
+                },
+                axisLabel: {
+                    color: '#d4ffff',
+                    fontSize: 12,
+                }
+            }, ],
+            series: [{
+                    name: '评分',
+                    type: 'line',
+                    yAxisIndex: 0,
+                    symbolSize: 12,
+                    itemStyle: {
+                        normal: {
+                            color: '#0EF100',
+                        }
+                    },
+                    data: []
+                },
+            ]
+        };
+
+        // 通过json文件更新图表
+        src="{{url_for('static',filename='score_line.json',_external=True)}}"
+        $.get(src).done(function(data){
+            myChart.setOption({
+                xAxis:[{
+                    data:data.car_name
+                }],
+                series:[
+                    {
+                        data:data.car_score
+                    }
+                ]
+        });
+        });
+        option && myChart.setOption(option);    
+    </script>
+</body>
+</html>

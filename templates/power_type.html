@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在售不同汽车发动机形式组成图</title>
+    <!-- <script src="../node_modules/echarts/dist/echarts.js"></script> -->
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="{{url_for('static',filename='jquery-3.3.1.min.js',_external=True)}}"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/uni.css')}}">
+</head>
+<body>
+    <div id="main" class="main"></div>
+    <button class="next"><a href = "http://127.0.0.1:5000/score_line",target="score_line",ref="noreferrer">NEXT</a></button>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+  
+        option = {
+            backgroundColor:'#000',
+            "animation": true,
+            "title": {
+                "text": "在售不同汽车发动机形式组成图",
+                // "subtext": "",
+                // "x": "center",
+                // "y": "center",
+                "left": "center",
+                "textStyle": {
+                    "color": "#fff",
+                    "fontSize": 25,
+                    "fontWeight": "normal",
+                    "width": "200px"
+                },
+                "subtextStyle": {
+                    "color": "#fff",
+                    "fontSize": 20,
+                    "fontWeight": "normal",
+                    "align": "center"
+                }
+            },
+            "legend": {
+                "width": "70%",
+                "left": "center",
+                "textStyle": {
+                    "color": "#fff",
+                    "fontSize": 16
+                },
+                "icon": "circle",
+                "right": "0",
+                "bottom": "0",
+                "padding": [30, 60],
+                "itemGap": 40,
+                "data": []
+            },
+            "series": [{
+                "type": "pie",
+                "center": ["50%", "50%"],
+                "radius": ["40%", "53%"],
+                "color": ["#FEE449", "#00FFFF", "#00FFA8", "#9F17FF", "#FFE400", "#F76F01", "#01A4F7", "#FE2C8A"],
+                "startAngle": 135,
+                "labelLine": {
+                    "normal": {
+                        "length": 25
+                    }
+                },
+                "label": {
+                    alignTo: 'labelLine',
+                    "normal": {
+                        "formatter": "{b|{b}:} {per|{d}%} ",
+                        "backgroundColor": "rgba(255, 147, 38, 0)",
+                        "borderColor": "transparent",
+                        "borderRadius": 4,
+                        "rich": {
+                            "a": {
+                                "color": "#999",
+                                "lineHeight": 22,
+                                "align": "center"
+                            },
+                            "hr": {
+                                "borderColor": "#aaa",
+                                "width": "100%",
+                                "borderWidth": 1,
+                                "height": 0
+                            },
+                            "b": {
+                                "color": "#b3e5ff",
+                                "fontSize": 16,
+                                "lineHeight": 33
+                            },
+                            "c": {
+                                "fontSize": 14,
+                                "color": "#eee"
+                            },
+                            "per": {
+                                "color": "#FDF44E",
+                                "fontSize": 14,
+                                "padding": [5, 8],
+                                "borderRadius": 2
+                            }
+                        },
+                        "textStyle": {
+                            "color": "#fff",
+                            "fontSize": 16
+                        }
+                    }
+                },
+                "emphasis": {
+                    "label": {
+                        "show": true,
+                        "formatter": "{b|{b}:}  {per|{d}%}  ",
+                        "backgroundColor": "rgba(255, 147, 38, 0)",
+                        "borderColor": "transparent",
+                        "borderRadius": 4,
+                        "rich": {
+                            "a": {
+                                "color": "#999",
+                                "lineHeight": 22,
+                                "align": "center"
+                            },
+                            "hr": {
+                                "borderColor": "#aaa",
+                                "width": "100%",
+                                "borderWidth": 1,
+                                "height": 0
+                            },
+                            "b": {
+                                "color": "#fff",
+                                "fontSize": 18,
+                                "lineHeight": 33
+                            },
+                            "c": {
+                                "fontSize": 14,
+                                "color": "#eee"
+                            },
+                            "per": {
+                                "color": "#FDF44E",
+                                "fontSize": 25,
+                                "padding": [5, 6],
+                                "borderRadius": 2
+                            }
+                        }
+                    }
+                },
+                "data": []
+            }, {
+                "type": "pie",
+                "center": ["50%", "50%"],
+                "radius": ["35%", "36%"],
+                "label": {
+                    "show": false
+                },
+            }]
+        };
+
+        // 通过json文件更新图表
+        src="{{url_for('static',filename='power_type.json',_external=True)}}"
+        $.get(src).done(function(data){
+            myChart.setOption({
+                "legned":{"data":data.power_name},
+                "series":[{"data":data.power_total}]
+        });
+        });
+        option && myChart.setOption(option);    
+    </script>
+</body>
+</html>

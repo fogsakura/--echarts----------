@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <link src="../static/js/flexible.js"> -->
+  <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+  <!-- <script src="{{url_for('static',filename='js/last.js')}}"></script> -->
+  <link rel="stylesheet" href="{{url_for('static',filename='css/last.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/car_command_list.css')}}">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body background="{{url_for('static',filename='img/bg.jpg')}}">
+  <div class="parent">
+    <header background="{{url_for('static',filename='img/head_bg.png')}}">
+      <h1>汽车之家数据可视化</h1>
+      <div class="showTime"></div>
+    </header>
+    <div class="group">
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+            <g>
+                <path
+                    d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z">
+                </path>
+            </g>
+        </svg>
+        <input placeholder="Search" type="text" id="car_name" class="input">
+    </div>
+    <button class="btn">提交</button>
+    <button class="next"><a href = "http://127.0.0.1:5000/index",target="_blank",ref="noreferrer">NEXT</a></button>
+    <div class="panel1" id="gra_one">
+      <script>
+        var chartDom = document.getElementById('gra_one');
+        var myChart = echarts.init(chartDom, 'dark');
+        var option;
+
+        // prettier-ignore
+        let dataAxis = ['南京汽车改装厂', '博速', 'LIMGENE凌际', '阿维塔科技', '钧天机械', '国金汽车', '东风本田', '星驰汽车', '龙程汽车', '集度汽车', '松散机车', '华晨新日', 'smart', '劳斯莱斯', '天际汽车', '摩登汽车', '力帆汽车', '华梓汽车', '国机智骏', '车驰汽车', '长城汽车', '恒源电动汽车', 'LEVC', '腾势汽车', '开沃汽车', '斯巴鲁', '岚图汽车', '豪驰智能', '阿斯顿・马丁', '飞凡汽车', '捷尼赛思', '合创汽车', '玛莎拉蒂', '明君汽车', '法拉利', '几何汽车', '迈凯伦', '雷达汽车', '御捷新能源', '爱驰汽车', '上汽通用五菱', '前途汽车', '华晨鑫源', '上汽通用凯迪拉克', '赛力斯汽车', '申龙汽车', '�j驰汽车', '沙龙汽车', '拓锐斯特', '陆地方舟', '悦达起亚', 'WALD', '比克汽车', '宝骐汽车', '东风日产', '飞碟汽车', '北汽新能源', '成功汽车', '恒润汽车', '华人运通', '恒驰汽车', '广汽本田', '上汽集团', '伟昊汽车', '航天神州汽车', '联合改装', 'Karma', '敏安汽车', '观致汽车', '奇瑞汽车', '长安马自达', '曙光汽车', '小跑车', '东风雪铁龙', '北汽瑞翔', '雷丁', '大运汽车', '合众汽车', '电动屋', '江汽集团', '阿尔法・罗密欧', '莱茵汽车', '小鹏汽车', '长安林肯', '银隆新能源', '宏远汽车', '极氪', '长安深蓝', 'AM晓奥汽车', '东风乘用车', '江铃汽车', '克慕勒汽车', '凯翼汽车', '上汽大众斯柯达', '瑞驰新能源', '雅升汽车', '江西五十铃', '华晨宝马', '华夏领舰', '领途汽车', '上汽大众', '长安汽车', '一汽-大众捷达', '越界', '新吉奥汽车', '西安新青年', '广汽讴歌', 'SWM斯威汽车', '东风风行', '理想汽车', '东风汽车', '上汽通用雪佛兰', '瓦滋', '特斯拉中国', '兰博基尼', '埃安', '金冠汽车', '云雀汽车', '福迪汽车', '浙江卡尔森', '恒天汽车', '安徽猎豹', '奇瑞捷豹路虎', '万象汽车', '神龙汽车', '江铃集团新能源', '九龙汽车', 'LUMMA Design', '厦门金旅', '吉利远程', '智己汽车', '路特斯', '零跑汽车', '奇鲁新能源', '创维汽车', '海马汽车', '中国重汽VGV', '安凯客车', 'DS汽车', '南京依维柯', '吉麦新能源', '云度新能源', '小虎汽车', '威马汽车', 'Polestar', '福田汽车', '上汽大通', 'Mansory', '奇瑞新能源', '华晨雷诺', '智锐汽车', '克蒂汽车', '东风英菲尼迪', '江淮汽车', '一汽凌源', '骐铃汽车', '野马新能源', '北京越野', '东南汽车', '野马汽车', '上汽奥迪', '苏州金龙', '睿蓝汽车', '厦门金龙', 'MINI', '宾利', '东风标致', '北汽昌河', '福汽新龙马', '蔚来', '北京汽车', '星途', '一汽奔腾', '北京汽车制造厂', '一汽红旗', '北京奔驰', '雷克萨斯', '长安福特', '大乘汽车', '宇通客车', '吉利汽车', '东风小康', '上汽通用别克', '开瑞汽车', '保时捷', '比亚迪', '广汽乘用车', '广汽丰田', '领克', '北京现代', '长安凯程', '路特斯(进口)', '中兴汽车', '陕西通家', '罗伦士', '奇瑞万达客车', '沃尔沃亚太', '英菲尼迪(进口)', '特斯拉（进口）', '捷豹(进口)', '一汽奥迪', '庆铃五十铃', '林肯(进口)', '雷诺 江铃集团', 'DS(进口)', '路虎(进口)', '广汽三菱', 'Jeep(进口)', '一汽红塔', 'MINI JCW', '郑州日产', 'SRM鑫源新能源', '一汽海马', '宝马(进口)', '一汽吉林', '沃尔沃(进口)', '福特电动车', '一汽丰田', '一汽-大众', '绵阳金杯', '福建奔驰', '五菱工业', '江铃福特', '宝马M', 'Audi Sport', '奔驰(进口)', '现代(进口)', '日产(进口)', '福特(进口)', '奥迪(进口)', '丰田(进口)', '大众(进口)', '梅赛德斯-AMG', '梅赛德斯-EQ', '梅赛德斯-迈巴赫'];
+        // prettier-ignore
+        let data = [126.67, 1200.0, 128.0, 43.24, 34.3, 15.98, 19.08, 142.97, 113.4, 39.98, 39.47, 10.0, 23.19, 627.92, 19.54, 16.84, 16.48, 4.44, 9.84, 113.31, 14.44, 4.66, 35.65, 37.8, 6.29, 26.63, 43.18, 6.5, 275.47, 25.47, 41.71, 17.43, 130.97, 9.72, 386.19, 15.82, 218.53, 18.0, 4.58, 21.15, 6.26, 32.98, 5.28, 37.41, 30.24, 13.2, 122.45, 48.8, 86.97, 19.0, 16.2, 103.8, 16.9, 9.9, 15.61, 13.92, 28.64, 5.86, 9.95, 64.71, 17.9, 19.35, 13.92, 117.8, 7.09, 37.78, 198.0, 3.98, 13.27, 11.49, 17.52, 10.59, 30.0, 18.59, 7.83, 5.57, 15.0, 15.4, 7.24, 12.76, 56.9, 133.0, 27.32, 36.24, 11.0, 13.5, 33.32, 31.71, 111.63, 11.27, 14.77, 45.32, 8.65, 16.27, 14.92, 130.55, 14.6, 42.56, 19.35, 4.78, 24.4, 11.8, 10.15, 12.9, 16.43, 16.9, 33.94, 9.19, 11.81, 38.15, 15.12, 18.55, 15.8, 33.65, 317.73, 23.33, 94.63, 7.28, 9.44, 133.0, 11.35, 7.46, 42.19, 13.33, 14.28, 11.36, 14.2, 244.43, -1.77, 15.38, 38.88, 92.8, 16.57, 3.7, 19.07, 11.91, 10.85, 27.47, 30.85, 18.84, 5.9, 10.96, 4.77, 19.15, 86.12, 12.2, 19.69, 268.37, 8.2, 12.08, 91.8, 113.92, 38.25, 13.43, 10.62, 8.5, 16.99, 25.8, 10.04, 7.5, 50.95, 15.54, 11.0, 9.28, 30.4, 342.81, 18.55, 5.41, 8.29, 50.75, 12.57, 15.98, 14.34, 7.64, 56.63, 41.09, 53.41, 25.14, 29.55, 99.36, 12.68, 5.29, 24.81, 6.97, 130.48, 18.15, 17.46, 20.81, 20.53, 17.11, 7.06, 795.2, 10.62, 11.8, 149.91, 23.6, 40.82, 46.65, 97.25, 56.18, 37.45, 11.73, 128.74, 17.0, 32.33, 115.37, 16.98, 56.05, 11.27, 39.28, 13.84, 16.32, 18.91, 74.67, 10.55, 55.86, 33.82, 21.97, 22.78, 6.89, 42.63, 11.68, 20.76, 129.13, 118.28, 62.27, 32.37, 81.8, 42.99, 76.18, 74.14, 55.31, 104.82, 127.23, 269.16];
+        let yMax = 500;
+        let dataShadow = [];
+        for (let i = 0; i < data.length; i++) {
+        dataShadow.push(yMax);
+        }
+        option = {
+            title: {
+                text: '品牌平均价格',
+                textStyle: {
+                    fontFamily:"Courier New",
+                    fontSize:30,
+                    align: "center",
+                    color: "#fff",
+                },
+                // top: "5%",
+                left: "center",
+                subtext: '单位：万元',
+                subtextStyle: {
+                    fontFamily:"Courier New",
+                    fontSize:15,
+                    align: "center",
+                    // color: "#fff",
+                },
+            },
+            xAxis: {
+                name: "品牌",
+                type: 'category',
+                axisLabel: {
+                    interval: 0,
+                    rotate: 30,
+                    color: '#fff'
+                },
+                data: dataAxis,
+                axisTick: {
+                show: false
+                },
+                axisLine: {
+                show: false
+                },
+                z: 10
+            },
+            yAxis: {
+                axisLine: {
+                show: false
+                },
+                axisTick: {
+                show: false
+                },
+                axisLabel: {
+                color: '#999'
+                }
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: { readOnly: false },
+                magicType: { type: ['line', 'bar'] },
+                restore: {},
+                saveAsImage: {}
+                }
+            },
+            dataZoom: [{
+                    type: 'slider',
+                    show: true,
+                    height: 20,
+                    left: '10%',
+                    right: '10%',
+                    bottom: '2%',
+                    start: 62,
+                    end: 70,
+                    textStyle: {
+                        color: '#d4ffff',
+                        fontSize: 11,
+                    },
+                }, {
+                    type: 'inside'
+                }
+            ],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            series: [
+                {
+                type: 'bar',
+                showBackground: true,
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: '#83bff6' },
+                    { offset: 0.5, color: '#188df0' },
+                    { offset: 1, color: '#188df0' }
+                    ])
+                },
+                emphasis: {
+                    itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: '#2378f7' },
+                        { offset: 0.7, color: '#2378f7' },
+                        { offset: 1, color: '#83bff6' }
+                    ])
+                    }
+                },
+                data: data
+                }
+            ]
+            };
+            // Enable data zoom when user click bar.
+            const zoomSize = 6;
+            myChart.on('click', function (params) {
+            console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
+            myChart.dispatchAction({
+                type: 'dataZoom',
+                startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
+                endValue:
+                dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
+            });
+            });
+
+            option && myChart.setOption(option);
+    </script>
+    </div>
+
+    <div class="panel2" id="gra_two">
+        <script>
+            $('.btn').click(function () {
+                // console.log($('#car_name').val())
+                var data = {
+                    data: JSON.stringify({
+                        "car_name": $('#car_name').val(),
+                    })
+                }
+                $.ajax({
+                    // url
+                    url: '/car_command',
+                    // 发送参数
+                    data: data,
+                    // 请求类型
+                    type: 'POST',
+                    async: false,
+                    // 执行成功函数
+                    success: function (res) {
+                        // console.log('json')
+                        // console.log(jsonTest);
+                        console.log(res);
+                        var myChart = echarts.init(document.getElementById('gra_two'), 'dark');
+    
+                        var chartDom = document.getElementById('gra_two');
+                        var myChart = echarts.init(chartDom);
+                        var option;
+    
+                        const ini_nameList = res['car_name'];
+                        const ini_valueData = res['re_num'];
+                        // const ini_nameList = ;
+                        // const ini_valueData = ;
+                        const seriesData = [];
+                        const data = genData();
+                        for (var i = 0; i < ini_nameList.length; i++) {
+                            console.log(ini_nameList[i]);
+                            seriesData.push({
+                                name: ini_nameList[i],
+                                value: ini_valueData[i],
+                            });
+                        }
+                        option = {
+                            title: {
+                                text: '用户各种评论的数量',
+                                subtext: '',
+                                left: 'center'
+                            },
+                            tooltip: {
+                                trigger: 'item'
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                left: 'left'
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                dataZoom: {
+                                    yAxisIndex: 'none'
+                                },
+                                dataView: { readOnly: false },
+                                magicType: { type: ['line', 'bar'] },
+                                restore: {},
+                                saveAsImage: {}
+                                }
+                            },
+                            series: [
+                                {
+                                    name: '用户评论人数',
+                                    type: 'pie',
+                                    radius: '50%',
+                                    data: data,
+                                    emphasis: {
+                                        itemStyle: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    }
+                                }
+                            ]
+                        };
+    
+    
+                        function genData() {
+                            const nameList = ini_nameList;
+                            const valueData = ini_valueData;
+                            const seriesData = [];
+                            for (var i = 0; i < nameList.length; i++) {
+                                seriesData.push({
+                                    name: nameList[i],
+                                    value: valueData[i],
+                                })
+                            }
+                            return seriesData
+                        }
+                        option && myChart.setOption(option);
+    
+                    },
+                    //请求失败函数
+                    error: function () {
+    
+                    }
+                })
+            })
+        </script>    
+    </div>
+  </div>
+  <script>
+    var t = null;
+    t = setTimeout(time, 1000); //開始运行
+    function time() {
+      clearTimeout(t); //清除定时器
+      dt = new Date();
+      var y = dt.getFullYear();
+      var mt = dt.getMonth() + 1;
+      var day = dt.getDate();
+      var h = dt.getHours(); //获取时
+      var m = dt.getMinutes(); //获取分
+      var s = dt.getSeconds(); //获取秒
+      document.querySelector(".showTime").innerHTML =
+        "当前时间：" +
+        y +
+        "年" +
+        mt +
+        "月" +
+        day +
+        "-" +
+        h +
+        "时" +
+        m +
+        "分" +
+        s +
+        "秒";
+      t = setTimeout(time, 1000); //设定定时器，循环运行
+    }
+  </script>
+</body>
+</html>

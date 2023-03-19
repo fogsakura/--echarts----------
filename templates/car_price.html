@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在售不同车系下最高和最低价格图</title>
+    <!-- <script src="../node_modules/echarts/dist/echarts.js"></script> -->
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <script src="{{url_for('static',filename='jquery-3.3.1.min.js',_external=True)}}"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/uni.css')}}">
+</head>
+<body>
+    <div id="main" class="main"></div>
+    <button class="next"><a href = "http://127.0.0.1:5000/power_type",target="_blank",ref="noreferrer">NEXT</a></button>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+  
+        option = {
+            backgroundColor: "#080b30",
+            title: {
+                text: "在售不同车系下最高和最低价格图",
+                textStyle: {
+                align: "center",
+                color: "#fff",
+                fontSize: 20,
+                },
+                top: "5%",
+                left: "center",
+            },
+            legend: {
+                // icon: "circle", // 修改形状
+                // itemHeight: 6, // 修改icon图形大小
+                itemGap: 24, // 修改间距
+                textStyle: {
+                    fontSize: 16,
+                    color: "#ffa",
+                    padding: [0, 0, 0, -8], // 修改文字和图标距离
+                },
+                itemwidth:"20",
+                itemheight:"20",
+                top: "5%",
+                right: '10%',
+                show: true,
+            },
+            toolbox: {
+                            show: true,
+                            feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: { readOnly: false },
+                            magicType: { type: ['line', 'bar'] },
+                            restore: {},
+                            saveAsImage: {}
+                            }
+                        },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: "cross",
+                    textStyle: {
+                        color: "#fff",
+                    },
+                    },
+            },
+            grid: {
+                top: "15%",
+                left: "5%",
+                right: "5%",
+                bottom: "15%",
+                // containLabel: true
+            },
+            dataZoom: [{
+                    type: 'slider',
+                    show: true,
+                    height: 20,
+                    left: '10%',
+                    right: '10%',
+                    bottom: '2%',
+                    start: 60,
+                    end: 61,
+                    textStyle: {
+                        color: '#d4ffff',
+                        fontSize: 11,
+                    },
+                }, {
+                    type: 'inside'
+                }
+            ],
+            xAxis: [
+                {
+                type: "category",
+                axisLine: {
+                    show: true,
+                },
+                splitArea: {
+                    // show: true,
+                    color: "#f00",
+                    lineStyle: {
+                    color: "#f00",
+                    },
+                },
+                axisLabel: {
+                    show:true,
+                    color: "#fff",
+                },
+                splitLine: {
+                    show: false,
+                },
+                boundaryGap: false,
+                data: [],
+                },
+            ],
+
+            yAxis: [
+                {
+                type: "value",
+                min: 0,
+                // max: 140,
+                splitNumber: 4,
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                    color: "rgba(255,255,255,0.1)",
+                    },
+                },
+                axisLine: {
+                    show: false,
+                },
+                axisLabel: {
+                    show: false,
+                    margin: 20,
+                    textStyle: {
+                    color: "#d1e6eb",
+                    },
+                },
+                axisTick: {
+                    show: false,
+                },
+                },
+            ],
+            series: [
+                {
+                name: "最高指导价",
+                type: "line",
+                // smooth: true, //是否平滑
+                showAllSymbol: true,
+                symbol: "circle",
+                symbolSize: 25,
+                lineStyle: {
+                    normal: {
+                    color: "#6c50f3",
+                    shadowColor: "rgba(0, 0, 0, .3)",
+                    shadowBlur: 0,
+                    shadowOffsetY: 5,
+                    shadowOffsetX: 5,
+                    },
+                },
+                label: {
+                    show: true,
+                    position: "top",
+                    textStyle: {
+                    color: "#6c50f3",
+                    },
+                },
+                itemStyle: {
+                    color: "#6c50f3",
+                    borderColor: "#fff",
+                    borderWidth: 3,
+                    shadowColor: "rgba(0, 0, 0, .3)",
+                    shadowBlur: 0,
+                    shadowOffsetY: 2,
+                    shadowOffsetX: 2,
+                },
+                tooltip: {
+                    show: false,
+                },
+                areaStyle: {
+                    normal: {
+                    color: new echarts.graphic.LinearGradient(
+                        0,
+                        0,
+                        0,
+                        1,
+                        [
+                        {
+                            offset: 0,
+                            color: "rgba(108,80,243,0.3)",
+                        },
+                        {
+                            offset: 1,
+                            color: "rgba(108,80,243,0)",
+                        },
+                        ],
+                        false
+                    ),
+                    shadowColor: "rgba(108,80,243, 0.9)",
+                    shadowBlur: 20,
+                    },
+                },
+                data: [],
+                },
+                {
+                name: "最低指导价",
+                type: "line",
+                // smooth: true, //是否平滑
+                showAllSymbol: true,
+                symbol: "circle",
+                symbolSize: 25,
+                lineStyle: {
+                    normal: {
+                    color: "#00ca95",
+                    shadowColor: "rgba(0, 0, 0, .3)",
+                    shadowBlur: 0,
+                    shadowOffsetY: 5,
+                    shadowOffsetX: 5,
+                    },
+                },
+                label: {
+                    show: true,
+                    position: "top",
+                    textStyle: {
+                    color: "#00ca95",
+                    },
+                },
+
+                itemStyle: {
+                    color: "#00ca95",
+                    borderColor: "#fff",
+                    borderWidth: 3,
+                    shadowColor: "rgba(0, 0, 0, .3)",
+                    shadowBlur: 0,
+                    shadowOffsetY: 2,
+                    shadowOffsetX: 2,
+                },
+                tooltip: {
+                    show: false,
+                },
+                areaStyle: {
+                    normal: {
+                    color: new echarts.graphic.LinearGradient(
+                        0,
+                        0,
+                        0,
+                        1,
+                        [
+                        {
+                            offset: 0,
+                            color: "rgba(0,202,149,0.3)",
+                        },
+                        {
+                            offset: 1,
+                            color: "rgba(0,202,149,0)",
+                        },
+                        ],
+                        false
+                    ),
+                    shadowColor: "rgba(0,202,149, 0.9)",
+                    shadowBlur: 20,
+                    },
+                },
+                data: [],
+                },
+            ],
+            };
+
+        // 通过json文件更新图表
+        src="{{url_for('static',filename='car_price.json',_external=True)}}"
+        $.get(src).done(function(data){
+            myChart.setOption({
+                xAxis:{
+                    data:data.car_name
+                },
+                series:[
+                    {
+                        data:data.car_price_max
+                    },
+                    {
+                        data:data.car_price_min
+                    }
+                ]
+        });
+        });
+        option && myChart.setOption(option);    
+    </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+.group {
+    position: absolute;
+    top:0;
+    left:600px;
+    display: flex;
+    line-height: 28px;
+    align-items: center;
+    position: relative;
+    max-width: 190px;
+   }
+
+.gra_one{
+    margin-top:50%;
+    width: 1000px;
+    height:600px
+}
+
+.gra_two{
+    width: 1000px;
+    height:600px
+}
+.input {
+    width: 100%;
+    height: 40px;
+    line-height: 28px;
+    padding: 0 1rem;
+    padding-left: 2.5rem;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    outline: none;
+    background-color: #0b8cba;
+    color: #0d0c22;
+    transition: .3s ease;
+}
+   
+.input::placeholder {
+    color: #9e9ea7;
+}
+   
+.input:focus, input:hover {
+    outline: none;
+    border-color: rgba(234,76,137,0.4);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
+}
+   
+.icon {
+    position: absolute;
+    left: 1rem;
+    fill: #9e9ea7;
+    width: 1rem;
+    height: 1rem;
+}
+.btn {
+    position: absolute;
+    top:244px;
+    left:800px;
+    color: #090909;
+    padding: 0.7em 1.7em;
+    font-size: 18px;
+    border-radius: 0.5em;
+    background: #0b8cba;
+    border: 1px solid #0b8297;
+    transition: all .3s;
+    box-shadow: 6px 6px 12px #0b8297,
+                -6px -6px 12px #0b8297;
+}
+   
+.btn:hover {
+    border: 1px solid white;
+}
+   
+.btn:active {
+    box-shadow: 4px 4px 12px #c5c5c5,
+                -4px -4px 12px #ffffff;
+}
